@@ -19,10 +19,7 @@ message(STAUTS "SECOND: ${SECOND}")
 message(STATUS "ARCHITECTURE_64: ${TARGET_64}")
 #--------------------------------------
 add_executable(project main.cpp add.cpp)
-include_directories("C:/Users/rpg59/lib/glfw-3.3.2.bin.WIN64/include/GLFW")
-include_directories("C:/Users/rpg59/lib/assimp/include")
-include_directories("C:/Users/rpg59/lib/glew-2.1.0/include/GL")
-include_directories("C:/Users/rpg59/lib/glm/glm")
+include_directories(${PROJECT_SOURCE_DIR}/dep/include)
 # STATIC -> .lib, SHARED -> .dll, OBJECT -> obj
 #add_library(AddLib STATIC add.cpp)
 #target_link_libraries(project AddLib)
@@ -30,8 +27,11 @@ include_directories("C:/Users/rpg59/lib/glm/glm")
 #set_target_properties(assimp PROPERTIES LINKER_LANGUAGE CXX)
 
 # create library AddLib.lib
-target_link_libraries(project C:/Users/rpg59/lib/glfw-3.3.2.bin.WIN64/lib-vc2019/glfw3.lib)
+
 target_link_libraries(project opengl32.lib)
-target_link_libraries(project C:/Users/rpg59/lib/assimp/lib/Debug/assimp-vc142-mtd.lib)
-target_link_libraries(project C:/Users/rpg59/lib/glew-2.1.0/lib/Release/x64/glew32s.lib)
+target_link_libraries(project ${PROJECT_SOURCE_DIR}/dep/lib/glfw3.lib)
+target_link_libraries(project ${PROJECT_SOURCE_DIR}/dep/lib/assimp-vc142-mtd.lib)
+target_link_libraries(project ${PROJECT_SOURCE_DIR}/dep/lib/glew32s.lib)
+
+message(${PROJECT_SOURCE_DIR})
 

@@ -2,20 +2,19 @@
 
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <vector>
+#include <cmath>
 
-#include "glew.h"
-#include "glfw3.h"
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
-#include <mat4x4.hpp>
-#include <vec3.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <cmath>
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 struct vec3 {
     float x;
@@ -48,7 +47,7 @@ int main() {
     }
 
     std::cout << scene->mNumMeshes << std::endl;
-    aiMesh *p_mesh = scene->mMeshes[0];
+    aiMesh *p_mesh = scene->mMeshes[1];
     std::cout << p_mesh->mNumVertices << std::endl;
 
 
@@ -59,9 +58,9 @@ int main() {
 
     for (uint32_t i = 0; i < p_mesh->mNumVertices; ++i) {
         vec3 vert;
-        vert.x = p_mesh->mVertices[i].x;
-        vert.y = p_mesh->mVertices[i].y;
-        vert.z = p_mesh->mVertices[i].z;
+        vert.x = p_mesh->mVertices[i].x * .1;
+        vert.y = p_mesh->mVertices[i].y * .1;
+        vert.z = p_mesh->mVertices[i].z * .1;
         vertices.push_back(vert);
     }
 
@@ -133,10 +132,11 @@ int main() {
     glUseProgram(program);
     int t = 0;
 
-    glm::mat4x4 projection = glm::perspective(glm::radians(90.), 4. / 3., .1, 100.);
+    glm::mat4x4 projection = glm::perspective(glm::radians(60.), 4. / 3., .1, 100.);
 
     glm::mat4x4 view = glm::lookAt(glm::vec3(std::cos(t / 100.), -2, std::sin(t / 100.)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     int projLocation = glGetUniformLocation(program, "proj");
+    int viewLocation = glGetUniformLocation(program, "view");
     glUniformMatrix4fv(0, 1, 0, &view[0][0]);
     glUniformMatrix4fv(projLocation, 1, 0, &projection[0][0]);
 
@@ -144,8 +144,8 @@ int main() {
 
 
     while (!glfwWindowShouldClose(window)) {
-        view = glm::lookAt(glm::vec3(std::cos(t / 100.), 1, std::sin(t / 100.)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-        glUniformMatrix4fv(0, 1, 0, &view[0][0]);
+        view = glm::lookAt(glm::vec3(std::cos(t / 2000.) * 2, 2, std::sin(t / 2000.) * 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+        glUniformMatrix4fv(viewLocation, 1, 0, &view[0][0]);
         ++t;
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(1, 1, .5, 1.);
